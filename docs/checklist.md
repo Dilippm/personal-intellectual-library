@@ -45,14 +45,14 @@
 
 ### Prisma Setup
 
-* [ ] Install Prisma
-* [ ] Initialize Prisma
-* [ ] Configure DATABASE_URL
-* [ ] Create Prisma schema
-* [ ] Create User model
-* [ ] Create Book model
-* [ ] Run first migration
-* [ ] Verify tables created
+* [x] Install Prisma
+* [x] Initialize Prisma
+* [x] Configure DATABASE_URL
+* [x] Create Prisma schema
+* [x] Create User model
+* [x] Create Book model
+* [x] Run first migration
+* [x] Verify tables created
 
 ---
 
@@ -60,8 +60,8 @@
 
 ### Authentication Packages
 
-* [ ] Install bcrypt
-* [ ] Install jsonwebtoken
+* [x] Install bcrypt
+* [x] Install jsonwebtoken
 
 ### Authentication Features
 

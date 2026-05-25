@@ -1,43 +1,56 @@
-version: '3.8'
 
 services:
   postgres:
     image: postgres:16-alpine
     container_name: personal-library-db
+
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-personal_library}
+
     ports:
-      - "5434:5432"
+      - "51214:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
     networks:
       - library-network
 
-  # Uncomment when you're ready to dockerize the backend
-  # backend:
+  # libraryservice:
   #   build:
   #     context: ./libraryservice
   #     dockerfile: Dockerfile
+
   #   container_name: personal-library-api
+
   #   ports:
   #     - "5000:5000"
+
   #   environment:
-  #     DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-personal_library}
-  #     NODE_ENV: development
+  #     # Ensure the backend connects to the postgres service on the Docker network
+  #     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/personal_library"
+  #     NODE_ENV: production
+
   #   depends_on:
   #     postgres:
   #       condition: service_healthy
+
   #   networks:
   #     - library-network
-  #   volumes:
-  #     - ./libraryservice/src:/app/src
+
+  #   # Do not mount the whole project here to avoid hiding the generated Prisma client
+  #   # For local development you can mount only `src` and install deps locally instead.
+
+  #   # Run migrations at container start and then start the server
+  #   command: sh -c "npx prisma migrate deploy && npx prisma generate && node src/index.js"
 
 volumes:
   postgres_data:
