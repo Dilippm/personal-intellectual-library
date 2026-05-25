@@ -1,5 +1,6 @@
 import { addBookService } from "../services/bookService.js";
-
+import csv from 'csv-parser';
+import fs from 'fs';
 
 export const addBook = async (req, res) => {
     try {
@@ -17,3 +18,54 @@ export const addBook = async (req, res) => {
         });
     }
 }   
+
+
+export const uploadBooksCSV = async (req, res) => {
+
+try {
+
+    const results = [];
+
+    fs.createReadStream(req.file.path)
+
+      .pipe(csv())
+
+      .on('data', (data) => {
+        results.push(data);
+      })
+
+      .on('end', async () => {
+
+        for (const item of results) {
+
+            await addBookService(
+
+              item['Book Name'],
+              item['Author'],
+              item['Genre'],
+              item['Type'],
+              item['Language'],
+              item['Small Description']
+
+            );
+        }
+
+        fs.unlinkSync(req.file.path);
+
+        res.json({
+          message:
+            'Books uploaded successfully',
+          totalBooks: results.length,
+        });
+
+      });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message: 'Server error',
+    });
+  }
+}

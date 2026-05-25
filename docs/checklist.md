@@ -70,7 +70,7 @@
 * [x] Hash passwords
 * [x] Generate JWT tokens
 * [x] Create auth middleware
-* [ ] Protect private routes
+
 
 
 ---
@@ -79,14 +79,14 @@
 
 ### Book APIs
 
-* [ ] Create add book API
-* [ ] Create get books API
-* [ ] Create get single book API
+* [x] Create add book API
+* [x] Create get books API
+* [x] Create get single book API
 * [ ] Create update book API
 * [ ] Create delete book API
 * [ ] Add validation
 * [ ] Add error handling
-* [ ] Test all APIs
+
 
 ---
 
