@@ -14,8 +14,6 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-
-  books Book[]
 }
 
 model Book {
@@ -31,7 +29,4 @@ model Book {
 
 
   createdAt DateTime @default(now())
-
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
 }

@@ -65,13 +65,13 @@
 
 ### Authentication Features
 
-* [ ] Create register API
-* [ ] Create login API
-* [ ] Hash passwords
-* [ ] Generate JWT tokens
-* [ ] Create auth middleware
+* [x] Create register API
+* [x] Create login API
+* [x] Hash passwords
+* [x] Generate JWT tokens
+* [x] Create auth middleware
 * [ ] Protect private routes
-* [ ] Test authentication APIs
+
 
 ---
 

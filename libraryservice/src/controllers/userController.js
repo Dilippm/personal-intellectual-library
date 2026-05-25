@@ -1,5 +1,5 @@
 
-import { createUser, findUniqueUser } from '../services/userService.js';
+import { createUser, findUniqueUser,getAllUsers } from '../services/userService.js';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/tokenServices.js';
 export const register = async (req, res) => {
@@ -67,6 +67,19 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error(error);
 
+    res.status(500).json({
+      message: 'Server error',
+    });
+  }
+};
+
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({
       message: 'Server error',
     });
