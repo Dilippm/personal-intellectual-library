@@ -1,3 +1,4 @@
+version: '3.8'
 
 services:
   postgres:
@@ -5,18 +6,18 @@ services:
     container_name: personal-library-db
 
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-personal_library}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: personal_library
 
     ports:
-      - "51214:5432"
+      - "5434:5432"
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,33 +25,31 @@ services:
     networks:
       - library-network
 
-  # libraryservice:
-  #   build:
-  #     context: ./libraryservice
-  #     dockerfile: Dockerfile
+  backend:
+    build:
+      context: ./libraryservice
+      dockerfile: Dockerfile
 
-  #   container_name: personal-library-api
+    container_name: personal-library-api
 
-  #   ports:
-  #     - "5000:5000"
+    ports:
+      - "3000:3000"
 
-  #   environment:
-  #     # Ensure the backend connects to the postgres service on the Docker network
-  #     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/personal_library"
-  #     NODE_ENV: production
+    env_file:
+      - ./libraryservice/.env
 
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  #   networks:
-  #     - library-network
+    volumes:
+      - ./libraryservice:/app
+      - /app/node_modules
 
-  #   # Do not mount the whole project here to avoid hiding the generated Prisma client
-  #   # For local development you can mount only `src` and install deps locally instead.
+    command: sh -c "npx prisma migrate deploy && npm run dev"
 
-  #   # Run migrations at container start and then start the server
-  #   command: sh -c "npx prisma migrate deploy && npx prisma generate && node src/index.js"
+    networks:
+      - library-network
 
 volumes:
   postgres_data:
