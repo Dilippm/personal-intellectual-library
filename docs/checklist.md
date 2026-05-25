@@ -10,27 +10,28 @@
 
 ### Project Setup
 
-* [ ] Create project folder
-* [ ] Initialize Git repository
-* [ ] Create GitHub repository
-* [ ] Push initial commit
+* [x] Create project folder
+* [x] Initialize Git repository
+* [x] Create GitHub repository
+* [x] Push initial commit
+
 
 ### Frontend Setup
 
-* [ ] Create react frontend app
-* [ ] Setup App Router
-* [ ] Run frontend locally
+* [x] Create react frontend app
+* [x] Setup App Router
+* [x] Run frontend locally
 
 ### Backend Setup
 
-* [ ] Create backend folder
-* [ ] Initialize Node.js project
-* [ ] Install Express.js
-* [ ] Install CORS
-* [ ] Install dotenv
-* [ ] Install nodemon
-* [ ] Create Express server
-* [ ] Run backend locally
+* [x] Create backend folder
+* [x] Initialize Node.js project
+* [x] Install Express.js
+* [x] Install CORS
+* [x] Install dotenv
+* [x] Install nodemon
+* [x] Create Express server
+* [x] Run backend locally
 
 ---
 
@@ -38,9 +39,9 @@
 
 ### PostgreSQL
 
-* [ ] Install PostgreSQL
-* [ ] Create database
-* [ ] Verify database connection
+* [x] Install PostgreSQL (Docker Compose)
+* [x] Create database
+* [x] Verify database connection
 
 ### Prisma Setup
 
