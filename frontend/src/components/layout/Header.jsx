@@ -52,7 +52,7 @@ export default function Header() {
           </span>
 
           <span>
-            Personal Library
+            Bodhi
           </span>
 
         </Link>

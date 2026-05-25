@@ -96,13 +96,13 @@
 
 ### Public Pages
 
-* [ ] Create landing page
+* [x] Create landing page
 * [x] Create login page
 
 
 ### Protected Pages
 
-* [ ] Create dashboard page
+* [x] Create dashboard page
 * [ ] Create library page
 * [ ] Create add book page
 * [ ] Create book details page
