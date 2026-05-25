@@ -97,8 +97,8 @@
 ### Public Pages
 
 * [ ] Create landing page
-* [ ] Create login page
-* [ ] Create signup page
+* [x] Create login page
+
 
 ### Protected Pages
 
