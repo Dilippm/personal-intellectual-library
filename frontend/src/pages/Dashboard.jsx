@@ -261,9 +261,9 @@ export default function Dashboard() {
               transition-all
               duration-300
 
-              hover:bg-emerald-500
+              hover:bg-black/90
               hover:text-white
-              hover:shadow-emerald-500/30
+              hover:shadow-white/20
               hover:scale-[1.02]
             "
           >
