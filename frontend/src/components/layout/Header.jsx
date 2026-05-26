@@ -65,17 +65,7 @@ export default function Header() {
           gap-6
         ">
 
-          <Link
-            to="/library"
-            className="
-              text-zinc-300
-              hover:text-white
-              transition
-            "
-          >
-            Library
-          </Link>
-
+        
           <Link
             to="/dashboard"
             className="
@@ -101,7 +91,7 @@ export default function Header() {
             asChild
           >
 
-            <Link to="/login">
+            <Link to="/">
               Login
             </Link>
 

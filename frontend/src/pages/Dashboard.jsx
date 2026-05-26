@@ -1,607 +1,562 @@
+import React, { useEffect, useState, useRef } from 'react'
+import AppLayout from '@/components/layout/AppLayout'
 import { Link } from 'react-router-dom'
-
-import {
-  LibraryBig,
-  BookOpen,
-  Plus,
-  Quote,
-  Brain,
-  Clock3,
-} from 'lucide-react'
 
 export default function Dashboard() {
 
-  const recentBooks = [
-    {
-      title: 'Atomic Habits',
-      author: 'James Clear',
-    },
+  // TODO: Fetch books from backend
 
-    {
-      title: 'Deep Work',
-      author: 'Cal Newport',
-    },
+  const [rows, setRows] = useState(() => Array.from({ length: 1 }, (_, i) => i + 1))
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const scrollParent = useRef(null)
+  const sectionRefs = useRef([])
 
-    {
-      title: 'Thinking, Fast and Slow',
-      author: 'Daniel Kahneman',
-    },
-  ]
+  const scrollSection = (index, direction) => {
+    const container = sectionRefs.current[index]
+    if (!container) return
 
-  const themes = [
-    'Philosophy',
-    'Systems Thinking',
-    'Psychology',
-    'AI',
-    'Stoicism',
-    'Behavior',
-  ]
+    const offset = container.clientWidth * 0.7
+    container.scrollBy({
+      left: direction * offset,
+      behavior: 'smooth',
+    })
+  }
+
+  const loadMore = () => {
+    if (loading) return
+    setLoading(true)
+    // simulate network
+    setTimeout(() => {
+      setRows((prev) => [...prev, ...Array.from({ length: 1 }, (_, i) => prev.length + i + 1)])
+      setPage((p) => p + 1)
+      setLoading(false)
+    }, 600)
+  }
+
+  useEffect(() => {
+    const mainEl = document.querySelector('main')
+    scrollParent.current = mainEl
+
+    const onScroll = () => {
+      if (!mainEl || loading) return
+      const threshold = 300
+      if (mainEl.scrollHeight - mainEl.scrollTop - mainEl.clientHeight < threshold) {
+        loadMore()
+      }
+    }
+
+    mainEl?.addEventListener('scroll', onScroll)
+    return () => mainEl?.removeEventListener('scroll', onScroll)
+  }, [loading])
 
   return (
+    <AppLayout>
 
-     <div className="
-    h-full
-    flex
-    overflow-hidden
-
-    bg-linear-to-br
-    from-zinc-950
-    via-stone-950
-    to-zinc-900
-
-    text-white
-  ">
-
-
-      {/* Sidebar */}
-
-    <aside className="
-      w-65
+  <div
+    className="
       h-full
 
-      shrink-0
+      relative
+      overflow-hidden
 
-      border-r
-      border-white/10
+      bg-linear-to-br
+      from-zinc-950
+      via-stone-900
+      to-emerald-950
 
-      bg-white/5
-      backdrop-blur-xl
+      px-8
+      py-6
+    "
+  >
 
-      p-6
+    {/* Ambient Glow */}
 
-      hidden
-      lg:flex
-      flex-col
-    ">
+    <div
+      className="
+        absolute
+        -top-30
+        -left-30
 
-      {/* Logo */}
+        w-105
+        h-105
 
-      <div className="
-        flex
-        items-center
-        gap-3
+        rounded-full
+        bg-emerald-500/10
 
-        mb-12
-      ">
+        blur-3xl
+      "
+    />
 
-        <div className="
-          w-12
-          h-12
+    <div
+      className="
+        absolute
+        -bottom-30
+        -right-30
 
-          rounded-2xl
+        w-75
+        h-75
 
-          bg-amber-500/10
+        rounded-full
+        bg-amber-500/5
 
+        blur-3xl
+      "
+    />
+
+    {/* CONTENT */}
+
+    <div className="relative z-10">
+
+      {/* TOP SECTION */}
+
+      <div
+        className="
           flex
-          items-center
-          justify-center
-        ">
+          flex-col
+          lg:flex-row
 
-          <LibraryBig className="
-            text-amber-300
-          " />
+          lg:items-center
+          lg:justify-between
 
-        </div>
+          gap-8
+
+          mb-4
+        "
+      >
+
+        {/* LEFT */}
 
         <div>
 
-          <h2 className="
-            font-bold
-            text-lg
-          ">
-            Intellectual
-          </h2>
+          <div
+            className="
+              inline-flex
+              items-center
+              gap-2
 
-          <p className="
-            text-zinc-500
-            text-sm
-          ">
-            Personal Archive
+              px-4
+              py-1.5
+
+              rounded-full
+
+              border
+              border-white/10
+
+              bg-white/5
+
+              backdrop-blur-xl
+
+              text-xs
+              uppercase
+              tracking-[0.25em]
+
+              text-zinc-300
+
+              mb-5
+            "
+          >
+            ✦ Personal Library
+          </div>
+
+          <h1
+            className="
+              text-4xl
+              font-black
+
+              tracking-tight
+
+              text-transparent
+              bg-clip-text
+
+              bg-linear-to-r
+              from-white
+              via-zinc-100
+              to-emerald-300
+            "
+          >
+            Your Knowledge
+            <br />
+            Collection
+          </h1>
+
+          <p
+            className="
+              mt-5
+
+              text-zinc-400
+              text-base
+
+              max-w-2xl
+              leading-relaxed
+            "
+          >
+            Explore books, revisit ideas,
+            and continue building your intellectual archive.
           </p>
+
+        </div>
+
+        {/* ACTIONS */}
+
+        <div
+          className="
+            flex
+            items-center
+            gap-4
+          "
+        >
+
+          {/* Search */}
+
+          <input
+            type="text"
+            placeholder="Search books..."
+            className="
+              h-12
+              w-72
+
+              rounded-2xl
+
+              border
+              border-white/10
+
+              bg-white/5
+
+              px-5
+
+              text-white
+              placeholder:text-zinc-500
+
+              backdrop-blur-xl
+
+              outline-none
+
+              focus:border-emerald-500/40
+            "
+          />
+
+          {/* Add Book */}
+
+          <Link
+            to="/add-book"
+            className="
+              h-12
+
+              inline-flex
+              items-center
+              justify-center
+
+              px-6
+
+              rounded-2xl
+
+              bg-white
+              text-black
+
+              font-semibold
+
+              shadow-lg
+
+              transition-all
+              duration-300
+
+              hover:bg-emerald-500
+              hover:text-white
+              hover:shadow-emerald-500/30
+              hover:scale-[1.02]
+            "
+          >
+            + Add Book
+          </Link>
 
         </div>
 
       </div>
 
-        {/* Navigation */}
+      {/* FILTERS */}
+
+      <div
+        className="
+          flex
+          flex-wrap
+          gap-3
+
+          mb-7
+        "
+      >
+
+        {[
+          'All',
+          'Reading',
+          'Completed',
+          'Wishlist',
+          'Philosophy',
+          'Psychology',
+          'AI',
+        ].map((filter) => (
+
+          <button
+            key={filter}
+            className="
+              px-5
+              py-2.5
+
+              rounded-full
 
-        <nav className="
-        flex
-        flex-col
-        gap-3
-      ">
-
-        <Link
-          to="/dashboard"
-          className="
-            flex
-            items-center
-            gap-3
-
-            px-4
-            py-3
-
-            rounded-xl
-
-            bg-white/10
-
-            hover:bg-white/15
-
-            transition-all
-          "
-        >
-
-          <Brain className="size-5" />
-
-          Dashboard
-
-        </Link>
-
-        <Link
-          to="/library"
-          className="
-            flex
-            items-center
-            gap-3
-
-            px-4
-            py-3
-
-            rounded-xl
-
-            hover:bg-white/10
-
-            transition-all
-          "
-        >
-
-          <BookOpen className="size-5" />
-
-          Library
-
-        </Link>
-
-        <Link
-          to="/add-book"
-          className="
-            flex
-            items-center
-            gap-3
-
-            px-4
-            py-3
-
-            rounded-xl
-
-            hover:bg-white/10
-
-            transition-all
-          "
-        >
-
-          <Plus className="size-5" />
-
-          Add Book
-
-        </Link>
-
-      </nav>
-
-    </aside>
-
-     
-
-      {/* Main Content */}
-
-       <main className="
-      flex-1
-      h-full
-
-      overflow-y-auto
-
-      p-8
-    ">
-
-        {/* Welcome */}
-
-        <section className="mb-12">
-
-          <p className="
-            text-zinc-500
-            text-sm
-          ">
-            Your reading sanctuary
-          </p>
-
-          <h1 className="
-            mt-3
-
-            text-5xl
-            font-bold
-
-            tracking-tight
-          ">
-
-            Good evening, Dilip.
-
-          </h1>
-
-          <p className="
-            mt-5
-
-            text-zinc-400
-            text-lg
-
-            max-w-3xl
-            leading-relaxed
-          ">
-
-            Your intellectual archive continues to grow.
-            Preserve what shapes your thinking
-            and revisit the ideas that matter most.
-
-          </p>
-
-        </section>
-
-        {/* Stats */}
-
-        <section className="
-          grid
-          grid-cols-1
-          md:grid-cols-3
-
-          gap-6
-
-          mb-12
-        ">
-
-          <div className="
-            bg-white/5
-
-            border
-            border-white/10
-
-            rounded-3xl
-            p-6
-
-            backdrop-blur-xl
-          ">
-
-            <p className="
-              text-zinc-500
-              text-sm
-            ">
-              Books Collected
-            </p>
-
-            <h2 className="
-              mt-4
-
-              text-4xl
-              font-bold
-            ">
-              147
-            </h2>
-
-          </div>
-
-          <div className="
-            bg-white/5
-
-            border
-            border-white/10
-
-            rounded-3xl
-            p-6
-
-            backdrop-blur-xl
-          ">
-
-            <p className="
-              text-zinc-500
-              text-sm
-            ">
-              Quotes Saved
-            </p>
-
-            <h2 className="
-              mt-4
-
-              text-4xl
-              font-bold
-            ">
-              382
-            </h2>
-
-          </div>
-
-          <div className="
-            bg-white/5
-
-            border
-            border-white/10
-
-            rounded-3xl
-            p-6
-
-            backdrop-blur-xl
-          ">
-
-            <p className="
-              text-zinc-500
-              text-sm
-            ">
-              Genres Explored
-            </p>
-
-            <h2 className="
-              mt-4
-
-              text-4xl
-              font-bold
-            ">
-              24
-            </h2>
-
-          </div>
-
-        </section>
-
-        {/* Main Grid */}
-
-        <section className="
-          grid
-          grid-cols-1
-          xl:grid-cols-3
-
-          gap-6
-        ">
-
-          {/* Recent Books */}
-
-          <div className="
-            xl:col-span-2
-
-            bg-white/5
-
-            border
-            border-white/10
-
-            rounded-3xl
-            p-8
-
-            backdrop-blur-xl
-          ">
-
-            <div className="
-              flex
-              items-center
-              justify-between
-
-              mb-8
-            ">
-
-              <div>
-
-                <h2 className="
-                  text-2xl
-                  font-bold
-                ">
-                  Recently Added
-                </h2>
-
-                <p className="
-                  text-zinc-500
-                  mt-2
-                ">
-                  Books shaping your current thinking.
-                </p>
-
-              </div>
-
-              <Clock3 className="
-                text-zinc-500
-              " />
-
-            </div>
-
-            <div className="
-              space-y-4
-            ">
-
-              {recentBooks.map((book, index) => (
-
-                <div
-                  key={index}
-                  className="
-                    flex
-                    items-center
-                    justify-between
-
-                    p-5
-
-                    rounded-2xl
-
-                    bg-black/20
-
-                    border
-                    border-white/5
-                  "
-                >
-
-                  <div>
-
-                    <h3 className="
-                      font-semibold
-                      text-lg
-                    ">
-                      {book.title}
-                    </h3>
-
-                    <p className="
-                      text-zinc-500
-                      mt-1
-                    ">
-                      {book.author}
-                    </p>
-
-                  </div>
-
-                  <BookOpen className="
-                    text-amber-300
-                  " />
-
-                </div>
-
-              ))}
-
-            </div>
-
-          </div>
-
-          {/* Right Sidebar Widgets */}
-
-          <div className="
-            space-y-6
-          ">
-
-            {/* Reflection Card */}
-
-            <div className="
               bg-white/5
 
               border
               border-white/10
 
-              rounded-3xl
-              p-6
+              text-sm
+              text-zinc-300
 
               backdrop-blur-xl
-            ">
 
-              <Quote className="
-                text-emerald-300
-                mb-5
-              " />
+              transition-all
+              duration-300
 
-              <blockquote className="
-                text-xl
-                leading-relaxed
-              ">
+              hover:bg-white/10
+              hover:border-emerald-400/30
 
-                “The quieter you become,
-                the more you are able to hear.”
+              cursor-pointer
+            "
+          >
+            {filter}
+          </button>
 
-              </blockquote>
+        ))}
 
-              <p className="
-                mt-5
-                text-zinc-500
-                text-sm
-              ">
-                Reflection of the day
+      </div>
+
+{/* BOOK SECTIONS */}
+
+<div className="space-y-12">
+
+  {[
+    {
+      title: 'Recent Reads',
+      subtitle: 'Books you keep returning to.',
+      color: 'from-emerald-900 to-zinc-900',
+    },
+    {
+      title: 'Malayalam Picks',
+      subtitle: 'Books from Malayalam literature.',
+      color: 'from-amber-900 to-zinc-900',
+    },
+    {
+      title: 'English Classics',
+      subtitle: 'Timeless books and modern classics.',
+      color: 'from-blue-950 to-zinc-900',
+    },
+    {
+      title: 'Psychology',
+      subtitle: 'Human behavior and thinking.',
+      color: 'from-purple-950 to-zinc-900',
+    },
+    {
+      title: 'AI & Technology',
+      subtitle: 'Systems, intelligence, and the future.',
+      color: 'from-emerald-950 to-zinc-900',
+    },
+  ].map((section, index) => (
+
+    <section key={section.title}>
+
+      {/* Section Header */}
+
+      <div
+        className="
+          flex
+          flex-wrap
+          items-end
+          justify-between
+
+          gap-3
+          mb-5
+        "
+      >
+
+        <div>
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+
+              tracking-tight
+              text-white
+            "
+          >
+            {section.title}
+          </h2>
+
+          <p
+            className="
+              mt-1
+              text-zinc-500
+            "
+          >
+            {section.subtitle}
+          </p>
+
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollSection(index, -1)}
+            className="
+              h-10
+              w-10
+              rounded-full
+              bg-white/5
+              border
+              border-white/10
+              text-zinc-300
+              transition-colors
+              hover:bg-white/10
+              hover:text-white
+            "
+            aria-label={`Scroll ${section.title} left`}
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollSection(index, 1)}
+            className="
+              h-10
+              w-10
+              rounded-full
+              bg-white/5
+              border
+              border-white/10
+              text-zinc-300
+              transition-colors
+              hover:bg-white/10
+              hover:text-white
+            "
+            aria-label={`Scroll ${section.title} right`}
+          >
+            →
+          </button>
+        </div>
+
+      </div>
+
+      {/* Horizontal Row */}
+
+      <div
+        ref={(el) => (sectionRefs.current[index] = el)}
+        className="
+          flex
+          gap-5
+
+          overflow-x-auto
+          overflow-y-hidden
+
+          pb-4
+
+          no-scrollbar
+
+          snap-x
+          snap-mandatory
+        "
+      >
+
+        {[1,2,3,4,5,6,7].map((book) => (
+
+          <div
+            key={book}
+            className="
+              shrink-0
+
+              w-40
+
+              group
+              cursor-pointer
+
+              snap-start
+            "
+          >
+
+            {/* Cover */}
+
+            <div
+              className={`
+                aspect-2/3
+
+                rounded-3xl
+
+                bg-linear-to-br
+                ${section.color}
+
+                border
+                border-white/10
+
+                overflow-hidden
+
+                transition-all
+                duration-300
+
+                group-hover:scale-[1.06]
+                group-hover:-translate-y-1
+                group-hover:border-emerald-400/30
+                group-hover:z-20
+              `}
+            />
+
+            {/* Info */}
+
+            <div className="mt-4">
+
+              <h3
+                className="
+                  text-white
+                  font-semibold
+
+                  truncate
+                "
+              >
+                Atomic Habits
+              </h3>
+
+              <p
+                className="
+                  text-sm
+                  text-zinc-500
+
+                  mt-1
+                "
+              >
+                James Clear
               </p>
 
             </div>
 
-            {/* Themes */}
-
-            <div className="
-              bg-white/5
-
-              border
-              border-white/10
-
-              rounded-3xl
-              p-6
-
-              backdrop-blur-xl
-            ">
-
-              <div className="
-                flex
-                items-center
-                gap-3
-
-                mb-6
-              ">
-
-                <Brain className="
-                  text-amber-300
-                " />
-
-                <h2 className="
-                  text-xl
-                  font-bold
-                ">
-                  Knowledge Themes
-                </h2>
-
-              </div>
-
-              <div className="
-                flex
-                flex-wrap
-                gap-3
-              ">
-
-                {themes.map((theme, index) => (
-
-                  <div
-                    key={index}
-                    className="
-                      px-4
-                      py-2
-
-                      rounded-full
-
-                      bg-black/20
-
-                      border
-                      border-white/10
-
-                      text-sm
-                      text-zinc-300
-                    "
-                  >
-
-                    {theme}
-
-                  </div>
-
-                ))}
-
-              </div>
-
-            </div>
-
           </div>
 
-        </section>
+        ))}
 
-      </main>
+      </div>
+
+    </section>
+
+  ))}
+
+</div>
+ 
+   
 
     </div>
+
+  </div>
+
+</AppLayout>
+
+   
+
   )
 }

@@ -7,7 +7,6 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import Library from './pages/Library'
 import AddBook from './pages/AddBook'
 import BookDetail from './pages/BookDetail'
 
@@ -38,15 +37,15 @@ function App() {
 
         <Routes>
 
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
 
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/library" element={<Library />} />
+    
 
           <Route path="/add-book" element={<AddBook />} />
 
