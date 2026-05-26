@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { Mail, Lock } from 'lucide-react'
+import { login } from '@/services/auth.api'
 
 export default function Login() {
 
@@ -14,16 +15,23 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault()
-
-    console.log('Login attempt:', {
-      email,
-      password,
-    })
-
+try{
+const data  = await login({ email, password })
+  // Store token
+    localStorage.setItem(
+      "token",
+      data.token
+    );
+    console.log("Login Success");
     navigate('/dashboard')
+}catch(error){
+  console.error('Login failed:', error)
+  alert(error.message || 'Login failed. Please try again.')
+}
+
   }
 
   return (
@@ -530,6 +538,7 @@ export default function Login() {
 {/* Login Button */}
 <div className="mt-6">
 <Button
+onClick={handleSubmit}
   variant="outline"
   size="lg"
   className="

@@ -84,8 +84,8 @@
 * [x] Create get single book API
 * [ ] Create update book API
 * [ ] Create delete book API
-* [ ] Add validation
-* [ ] Add error handling
+* [x] Add validation
+* [x] Add error handling
 
 
 ---
@@ -103,8 +103,8 @@
 ### Protected Pages
 
 * [x] Create dashboard page
-* [ ] Create library page
-* [ ] Create add book page
+* [x] Create library page
+* [x] Create add book page
 * [ ] Create book details page
 
 ---
@@ -113,22 +113,21 @@
 
 ### API Integration
 
-* [ ] Setup Axios
-* [ ] Connect frontend to backend
-* [ ] Implement login flow
-* [ ] Store JWT token
-* [ ] Fetch books from backend
-* [ ] Add new book from frontend
-* [ ] Edit book from frontend
+* [x] Setup Axios
+* [x] Connect frontend to backend
+* [x] Implement login flow
+* [x] Store JWT token
+* [x] Fetch books from backend
+* [x] Add new book from frontend
+
 * [ ] Delete book from frontend
 
 ### UI Components
 
-* [ ] Create Navbar
-* [ ] Create Sidebar
+* [x] Create Navbar
+* [x] Create Sidebar
 * [ ] Create Book Card
-* [ ] Create Search Bar
-* [ ] Create Rating Component
+* [x] Create Search Bar
 * [ ] Add loading states
 * [ ] Add empty states
 
@@ -157,17 +156,11 @@
 
 ## Git
 
-* [ ] Commit after every feature
-* [ ] Use meaningful commit messages
-* [ ] Push code regularly
+* [x] Commit after every feature
+* [x] Use meaningful commit messages
+* [x] Push code regularly
 
-## Code Quality
 
-* [ ] Keep clean folder structure
-* [ ] Use environment variables
-* [ ] Avoid hardcoding secrets
-* [ ] Add proper error handling
-* [ ] Write reusable components
 
 ---
 
@@ -182,7 +175,7 @@
 
 ## Frontend
 
-* [ ] User can signup
+
 * [ ] User can login
 * [ ] User can add books
 * [ ] User can edit books

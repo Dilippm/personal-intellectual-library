@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useMemo, useState } from 'react'
+import { useMemo, useState,useEffect } from 'react'
 import AppLayout from '@/components/layout/AppLayout'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,48 +11,22 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import AddBookModal from '@/components/books/AddModal'
+import { addBook, getBooks } from '@/services/books.api'
 
 export default function Books() {
   const navigate = useNavigate()
 
   // BOOKS DATA
-  const [books, setBooks] = useState([
-    {
-      id: 1,
-      title: 'Atomic Habits',
-      author: 'James Clear',
-      genre: 'Self Help',
-      rating: 5,
-    },
-    {
-      id: 2,
-      title: 'The Psychology of Money',
-      author: 'Morgan Housel',
-      genre: 'Finance',
-      rating: 4,
-    },
-    {
-      id: 3,
-      title: 'Deep Work',
-      author: 'Cal Newport',
-      genre: 'Productivity',
-      rating: 5,
-    },
-    {
-      id: 4,
-      title: 'Ikigai',
-      author: 'Héctor García',
-      genre: 'Lifestyle',
-      rating: 4,
-    },
-  ])
+  const [books, setBooks] = useState([]);
 
   // SEARCH
   const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm,setDebouncedSearchTerm] = useState("");
 
   // PAGINATION
   const [currentPage, setCurrentPage] = useState(1)
-  const booksPerPage = 2
+  const [totalPages, setTotalPages] = useState(1)
+  const booksPerPage = 4
 
   // MODAL
   const [openModal, setOpenModal] = useState(false)
@@ -66,7 +40,42 @@ export default function Books() {
   language: '',
   description: '',
   })
+// DEBOUNCE SEARCH
+  useEffect(() => {
 
+  const timer = setTimeout(() => {
+
+    setDebouncedSearchTerm(searchTerm);
+
+  }, 500);
+
+  return () => clearTimeout(timer);
+
+}, [searchTerm]);
+  //Fetch the books data from the backend when the component mounts
+  useEffect(() => {
+
+  const fetchBooks = async () => {
+
+    try {
+
+      const data = await getBooks( currentPage,booksPerPage,debouncedSearchTerm);
+
+setCurrentPage(data.page);
+setTotalPages(data.totalPages);
+
+      setBooks(data.books);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+  };
+
+  fetchBooks();
+
+}, [currentPage, debouncedSearchTerm]);
   // HANDLE INPUT CHANGE
   const handleChange = (e) => {
     setFormData({
@@ -76,49 +85,53 @@ export default function Books() {
   }
 
   // ADD BOOK
-  const handleAddBook = (e) => {
-    e.preventDefault()
+  const handleAddBook = async (e) => {
 
-    const newBook = {
-      id: books.length + 1,
-      ...formData,
-    }
+  e.preventDefault();
 
-    setBooks([newBook, ...books])
+  try {
 
+    await addBook(formData);
+
+    // Refetch books
+    const data = await getBooks(
+      currentPage,
+      booksPerPage,
+      debouncedSearchTerm
+    );
+
+    setBooks(data.books);
+
+    setTotalPages(data.totalPages);
+
+    // Reset form
     setFormData({
       title: '',
       author: '',
+      type: '',
       genre: '',
-      rating: 5,
-    })
+      language: '',
+      description: '',
+    });
 
-    setOpenModal(false)
+    // Close modal
+    setOpenModal(false);
+
+  } catch (error) {
+
+    console.error(error);
+
   }
+};
 
-  // FILTER BOOKS
-  const filteredBooks = useMemo(() => {
-    return books.filter(
-      (book) =>
-        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.genre.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [books, searchTerm])
+ 
 
-  // PAGINATION LOGIC
-  const totalPages = Math.ceil(filteredBooks.length / booksPerPage)
+ 
 
-  const startIndex = (currentPage - 1) * booksPerPage
-
-  const currentBooks = filteredBooks.slice(
-    startIndex,
-    startIndex + booksPerPage
-  )
 
   return (
     <AppLayout>
-    <div className="h-screen relative overflow-hidden">
+    <div className="h-screen relative overflow-hidden ">
       <div
   className="
     h-full
@@ -138,7 +151,20 @@ export default function Books() {
   "
 >
 
-        
+        {/* Ambient Glow */}
+
+    <div
+      className="
+        absolute
+        -top-30
+        -left-30
+        w-105
+        h-105
+        rounded-full
+        bg-emerald-500/10
+        blur-3xl
+      "
+    />
         
         {/* HEADER */}
         <div className="flex items-center justify-between mb-4">
@@ -164,31 +190,7 @@ export default function Books() {
               Manage your intellectual collection
             </p>
           </div>
-
-          {/* ADD BUTTON */}
-          
-          <Button
-  onClick={() => setOpenModal(true)}
-  className="
-    bg-white
-    text-black
-    cursor-pointer
-
-    hover:bg-black
-    hover:text-white
-
-    transition-all
-    duration-300
-    font-semibold
-    text-center
-  "
->
-  <Plus size={18} className="" />
-  Add Book
-</Button>
-        </div>
-
-        {/* SEARCH */}
+ {/* SEARCH */}
         <div
           className="
             flex
@@ -239,6 +241,30 @@ export default function Books() {
       "
     />
         </div>
+          {/* ADD BUTTON */}
+          
+          <Button
+  onClick={() => setOpenModal(true)}
+  className="
+    bg-white
+    text-black
+    cursor-pointer
+
+    hover:bg-black
+    hover:text-white
+
+    transition-all
+    duration-300
+    font-semibold
+    text-center
+  "
+>
+  <Plus size={18} className="" />
+  Add Book
+</Button>
+        </div>
+
+       
 
         {/* TABLE */}
         <div
@@ -264,26 +290,26 @@ export default function Books() {
               "
             >
               <tr>
-                <th className="text-left px-6 py-4">
+                <th className="text-left px-6 py-1">
+                  Book ID
+                </th>
+
+                <th className="text-left px-6 py-1">
                   Title
                 </th>
 
-                <th className="text-left px-6 py-4">
+                <th className="text-left px-6 py-1">
                   Author
                 </th>
 
-                <th className="text-left px-6 py-4">
-                  Genre
-                </th>
-
-                <th className="text-left px-6 py-4">
-                  Rating
+                <th className="text-left px-6 py-1">
+                  Language
                 </th>
               </tr>
             </thead>
 
             <tbody>
-              {currentBooks.map((book) => (
+              {books.map((book) => (
                 <tr
                   key={book.id}
                   className="
@@ -291,24 +317,23 @@ export default function Books() {
                     border-white/5
 
                     hover:bg-white/5
-
                     transition
                   "
                 >
-                  <td className="px-6 py-5 font-medium">
+                  <td className="px-6 py-3 font-small">
+                    {book.bookId}
+                  </td>
+
+                  <td className="px-6 py-3 text-zinc-300">
                     {book.title}
                   </td>
 
-                  <td className="px-6 py-5 text-zinc-300">
+                  <td className="px-6 py-3 text-zinc-400">
                     {book.author}
                   </td>
 
-                  <td className="px-6 py-5 text-zinc-400">
-                    {book.genre}
-                  </td>
-
-                  <td className="px-6 py-5 text-emerald-400 font-semibold">
-                    {book.rating}/5
+                  <td className="px-6 py-3 text-emerald-400 font-semibold">
+                    {book.language}
                   </td>
                 </tr>
               ))}
