@@ -55,10 +55,10 @@ export default function Dashboard() {
 
   <div
     className="
-      h-full
+      h-screen
 
       relative
-      overflow-hidden
+      overflow-y-auto
 
       bg-linear-to-br
       from-zinc-950
@@ -236,39 +236,6 @@ export default function Dashboard() {
             "
           />
 
-          {/* Add Book */}
-
-          <Link
-            to="/add-book"
-            className="
-              h-12
-
-              inline-flex
-              items-center
-              justify-center
-
-              px-6
-
-              rounded-2xl
-
-              bg-white
-              text-black
-
-              font-semibold
-
-              shadow-lg
-
-              transition-all
-              duration-300
-
-              hover:bg-black/90
-              hover:text-white
-              hover:shadow-white/20
-              hover:scale-[1.02]
-            "
-          >
-            + Add Book
-          </Link>
 
         </div>
 
@@ -332,7 +299,7 @@ export default function Dashboard() {
 
 {/* BOOK SECTIONS */}
 
-<div className="space-y-12">
+<div className="space-y-12 mb-40">
 
   {[
     {
@@ -457,7 +424,7 @@ export default function Dashboard() {
           overflow-x-auto
           overflow-y-hidden
 
-          pb-4
+          pb-2
 
           no-scrollbar
 
@@ -496,7 +463,7 @@ export default function Dashboard() {
                 border
                 border-white/10
 
-                overflow-hidden
+                overflow-y-auto
 
                 transition-all
                 duration-300
@@ -543,6 +510,8 @@ export default function Dashboard() {
       </div>
 
     </section>
+
+
 
   ))}
 

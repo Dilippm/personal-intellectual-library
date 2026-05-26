@@ -65,17 +65,25 @@ export default function Header() {
           gap-6
         ">
 
-        
-          <Link
-            to="/dashboard"
+         <Button
             className="
-              text-zinc-300
+              bg-white
+              text-black
+
+              hover:bg-emerald-500
               hover:text-white
-              transition
+
+              transition-all
+              duration-300
             "
+            asChild
           >
-            Dashboard
-          </Link>
+
+            <Link to="/dashboard">
+              Dashboard
+            </Link>
+
+          </Button>
 
           <Button
             className="

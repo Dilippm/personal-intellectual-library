@@ -5,6 +5,7 @@ import {
   BookOpen,
   Plus,
   Brain,
+  User,
 } from 'lucide-react'
 
 export default function AppLayout({ children }) {
@@ -14,7 +15,7 @@ export default function AppLayout({ children }) {
     <div className="
       h-fill
       flex
-      overflow-hidden
+    
 
       bg-linear-to-br
       from-zinc-950
@@ -129,7 +130,54 @@ export default function AppLayout({ children }) {
 
           </Link>
 
+<Link
+            to="/users"
+            className="
+              flex
+              items-center
+              gap-3
 
+              px-4
+              py-3
+
+              rounded-xl
+
+              hover:bg-white/10
+
+              transition-all
+            "
+          >
+
+            <User className="size-5" />
+
+            User Management
+
+          </Link>
+
+
+          <Link
+            to="/books"
+            className="
+              flex
+              items-center
+              gap-3
+
+              px-4
+              py-3
+
+              rounded-xl
+
+              hover:bg-white/10
+
+              transition-all
+            "
+          >
+
+            <BookOpen className="size-5" />
+
+            Books
+
+          </Link>
         </nav>
 
       </aside>
@@ -138,11 +186,12 @@ export default function AppLayout({ children }) {
 
       <main className="
         flex-1
-        h-full
+       w-55
+       h-fill
         
         lg:ml-55
 
-        overflow-y-auto
+       
       ">
 
         {children}

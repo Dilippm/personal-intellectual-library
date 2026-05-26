@@ -7,7 +7,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import AddBook from './pages/AddBook'
+import Books from './pages/Books'
 import BookDetail from './pages/BookDetail'
 
 function App() {
@@ -32,7 +32,8 @@ function App() {
 
       <main className="
         flex-1
-        overflow-y-auto
+        overflow-hidden
+     
       ">
 
         <Routes>
@@ -45,9 +46,9 @@ function App() {
 
           <Route path="/dashboard" element={<Dashboard />} />
 
-    
+          <Route path="/books" element={<Books />} />
 
-          <Route path="/add-book" element={<AddBook />} />
+        
 
           <Route path="/books/:id" element={<BookDetail />} />
 
